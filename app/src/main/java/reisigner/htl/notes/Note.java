@@ -1,6 +1,8 @@
 package reisigner.htl.notes;
 
-public class Note {
+import java.io.Serializable;
+
+public class Note implements Serializable {
     private String title;
     private String details;
     private String date;
@@ -9,6 +11,15 @@ public class Note {
         this.title = title;
         this.details = details;
         this.date = date;
+    }
+
+    public String serialize() {
+        return title + ";" + details + ";" + date;
+    }
+
+    public static Note deserialize(String line) {
+        String[] parts = line.split(";");
+        return new Note(parts[0], parts[1], parts[2]);
     }
 
     public String getTitle() {
