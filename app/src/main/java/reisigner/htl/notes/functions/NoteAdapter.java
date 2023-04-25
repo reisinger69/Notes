@@ -12,18 +12,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 
-import reisigner.htl.notes.Note;
+import reisigner.htl.notes.ToDo;
 import reisigner.htl.notes.R;
 
-public class NoteAdapter extends ArrayAdapter<Note> {
+public class NoteAdapter extends ArrayAdapter<ToDo> {
 
     private LayoutInflater inflater;
     private int layoutID;
 
-    public NoteAdapter(@NonNull Context context, @NonNull List<Note> objects) {
+    public NoteAdapter(@NonNull Context context, @NonNull List<ToDo> objects) {
         super(context, 0, objects);
     }
 
@@ -42,17 +42,15 @@ public class NoteAdapter extends ArrayAdapter<Note> {
             currentItemView = LayoutInflater.from(getContext()).inflate(R.layout.listelement, parent, false);
         }
 
-        Note n = getItem(position);
+        ToDo n = getItem(position);
 
         TextView textView1 = currentItemView.findViewById(R.id.noteTitle);
         textView1.setText(n.getTitle());
 
         TextView textView2 = currentItemView.findViewById(R.id.noteDate);
-        textView2.setText(n.getDate());
+        textView2.setText(n.getDate().toString());
 
-        String[] parts = n.getDate().split("\\.");
-
-        LocalDate date = LocalDate.of(Integer.parseInt(parts[2]), Integer.parseInt(parts[1]), Integer.parseInt(parts[0]));
+        LocalDate date = n.getDate().toLocalDate();
         if (date.isBefore(LocalDate.now())) {
             textView1.setBackgroundColor(Color.argb(162, 227, 34, 89));
             textView2.setBackgroundColor(Color.argb(162, 227, 34, 89));

@@ -2,11 +2,7 @@ package reisigner.htl.notes.functions;
 
 import android.content.Context;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -14,13 +10,13 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import reisigner.htl.notes.Note;
+import reisigner.htl.notes.ToDo;
 
 public class FileHandler {
-    public static void saveFile(List<Note> notes, Context context) {
+    public static void saveFile(List<ToDo> notes, Context context) {
         try {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("save.csv", Context.MODE_PRIVATE));
-            for (Note n:
+            for (ToDo n:
                  notes) {
                 outputStreamWriter.write(n.serialize());
                 outputStreamWriter.write("\n");
@@ -31,8 +27,8 @@ public class FileHandler {
         }
     }
 
-    public static List<Note> readFile(Context context)  {
-        List<Note> notes = new ArrayList<>();
+    public static List<ToDo> readFile(Context context)  {
+        List<ToDo> notes = new ArrayList<>();
         InputStream inputStream = null;
         try {
             inputStream = context.openFileInput("save.csv");
@@ -42,7 +38,7 @@ public class FileHandler {
                 String line = "";
 
                 while ((line = bufferedReader.readLine()) != null) {
-                    notes.add(Note.deserialize(line));
+                    notes.add(ToDo.deserialize(line));
                 }
             }
         } catch (IOException e) {

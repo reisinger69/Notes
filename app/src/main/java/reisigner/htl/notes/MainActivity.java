@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -19,8 +18,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import reisigner.htl.notes.functions.FileHandler;
@@ -29,7 +26,7 @@ import reisigner.htl.notes.functions.NoteAdapter;
 public class MainActivity extends AppCompatActivity {
 
     int positionOfEditedNote;
-    public static List<Note> notes = null;
+    public static List<ToDo> notes = null;
     NoteAdapter adapter;
     ListView listView;
 
@@ -41,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
                     if (result.getData() != null) {
                         Intent i = result.getData();
                         Bundle b = i.getExtras();
-                        notes.add((Note) b.get("note"));
+                        notes.add((ToDo) b.get("note"));
                         adapter.notifyDataSetChanged();
                     }
                 }
@@ -56,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                         Intent i = result.getData();
                         Bundle b = i.getExtras();
                         notes.remove(positionOfEditedNote);
-                        notes.add( (Note) b.get("note"));
+                        notes.add( (ToDo) b.get("note"));
                         adapter.notifyDataSetChanged();
                     }
                 }

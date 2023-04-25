@@ -1,25 +1,26 @@
 package reisigner.htl.notes;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
-public class Note implements Serializable {
+public class ToDo implements Serializable {
     private String title;
     private String details;
-    private String date;
+    private LocalDateTime date;
 
-    public Note(String title, String details, String date) {
+    public ToDo(String title, String details, LocalDateTime date) {
         this.title = title;
         this.details = details;
         this.date = date;
     }
 
     public String serialize() {
-        return title + ";" + details + ";" + date;
+        return title + ";" + details + ";" + date.toString();
     }
 
-    public static Note deserialize(String line) {
+    public static ToDo deserialize(String line) {
         String[] parts = line.split(";");
-        return new Note(parts[0], parts[1], parts[2]);
+        return new ToDo(parts[0], parts[1], LocalDateTime.parse(parts[2]));
     }
 
     public String getTitle() {
@@ -38,11 +39,11 @@ public class Note implements Serializable {
         this.details = details;
     }
 
-    public String getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 }
