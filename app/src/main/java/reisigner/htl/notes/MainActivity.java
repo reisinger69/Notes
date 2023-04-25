@@ -6,16 +6,20 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import java.util.List;
@@ -29,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
     public static List<ToDo> notes = null;
     NoteAdapter adapter;
     ListView listView;
+    LinearLayout linearLayout;
+
+    private SharedPreferences prefs;
+    private SharedPreferences.OnSharedPreferenceChangeListener preferencesChangeListener;
 
     ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -70,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         final int idCreate = R.id.createNewNote;
         final int idSave = R.id.saveNotes;
+        final int idSettings = R.id.menu_preferences;
         switch (id) {
             case idCreate:
                 Intent t = new Intent(this, CreateNoteActivity.class);
@@ -78,12 +87,17 @@ public class MainActivity extends AppCompatActivity {
             case idSave:
                 FileHandler.saveFile(notes, getApplicationContext());
                 break;
+            case idSettings:
+                Intent intent = new Intent(this,
+                        MySettingsActivity.class);
+                startActivityForResult(intent, 1);
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        System.out.println("OnCreateContextMenu ");;
         getMenuInflater().inflate(R.menu.kontextmenu, menu);
         super.onCreateContextMenu(menu, v, menuInfo);
     }
@@ -120,6 +134,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(this );
+        preferencesChangeListener = (sharedPrefs , key ) -> preferenceChanged(sharedPrefs, key);
+        prefs.registerOnSharedPreferenceChangeListener( preferencesChangeListener );
+
+
         if(notes == null) {
             notes = FileHandler.readFile(getApplicationContext());
             if (notes.size() == 0) {
@@ -136,8 +155,24 @@ public class MainActivity extends AppCompatActivity {
         listView = findViewById(R.id.list);
         adapter = new NoteAdapter(getApplicationContext(), notes);
         listView.setAdapter(adapter);
-        registerForContextMenu(listView);
 
+        linearLayout = findViewById(R.id.background);
+
+        changeBackground(prefs.getBoolean("darkMode", true));
+        registerForContextMenu(listView);
     }
+
+    private void preferenceChanged(SharedPreferences sharedPrefs , String key) {
+        changeBackground(sharedPrefs.getBoolean(key, true));
+    }
+
+    private void changeBackground(boolean isDarkmode){
+        if (isDarkmode){
+            linearLayout.setBackgroundColor(Color.BLACK);
+        } else {
+            linearLayout.setBackgroundColor(Color.TRANSPARENT);
+        }
+    }
+
 
 }

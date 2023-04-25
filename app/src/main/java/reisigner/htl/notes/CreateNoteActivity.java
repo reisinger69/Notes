@@ -1,16 +1,20 @@
 package reisigner.htl.notes;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TimePicker;
 
@@ -31,6 +35,11 @@ public class CreateNoteActivity extends AppCompatActivity implements View.OnClic
     LocalDateTime setDateTime = LocalDateTime.now();
 
     NoteAdapter adapter;
+
+    LinearLayout linearLayout;
+
+    private SharedPreferences prefs;
+    private SharedPreferences.OnSharedPreferenceChangeListener preferencesChangeListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +91,29 @@ public class CreateNoteActivity extends AppCompatActivity implements View.OnClic
                 }, dateToUse.getHour(), dateToUse.getMinute(),false).show();
             }
         }, dateToUse.getYear(), dateToUse.getMonth().getValue(), dateToUse.getDayOfMonth());
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(this );
+        preferencesChangeListener = (sharedPrefs , key ) -> preferenceChanged(sharedPrefs, key);
+        prefs.registerOnSharedPreferenceChangeListener( preferencesChangeListener );
+
+        linearLayout=findViewById(R.id.linearLayout);
+
+        changeBackground(prefs.getBoolean("darkMode", true));
+    }
+
+
+    private void preferenceChanged(SharedPreferences sharedPrefs , String key) {
+        changeBackground(sharedPrefs.getBoolean(key, true));
+    }
+
+    private void changeBackground(boolean isDarkmode){
+        if (isDarkmode){
+            title.setBackgroundColor(Color.WHITE);
+            details.setBackgroundColor(Color.WHITE);
+            linearLayout.setBackgroundColor(Color.BLACK);
+        } else {
+            linearLayout.setBackgroundColor(Color.TRANSPARENT);
+        }
     }
 
     @Override

@@ -15,7 +15,14 @@
             android:name=".CreateNoteActivity"
             android:exported="false">
             <meta-data
-                android:name="android.app.lib_name"
+                android:name="android.CreateNote"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".MySettingsActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.Settings"
                 android:value="" />
         </activity>
         <activity

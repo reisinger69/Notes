@@ -52,11 +52,9 @@ public class NoteAdapter extends ArrayAdapter<ToDo> {
 
         LocalDate date = n.getDate().toLocalDate();
         if (date.isBefore(LocalDate.now())) {
-            textView1.setBackgroundColor(Color.argb(162, 227, 34, 89));
-            textView2.setBackgroundColor(Color.argb(162, 227, 34, 89));
+            currentItemView.setBackgroundColor(Color.argb(162, 227, 34, 89));
         } else {
-            textView1.setBackgroundColor(Color.argb(255,255,255,255));
-            textView2.setBackgroundColor(Color.argb(255,255,255,255));
+            currentItemView.setBackgroundColor(Color.argb(255,255,255,255));
         }
 
         return currentItemView;
