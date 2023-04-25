@@ -1,26 +1,28 @@
 package reisigner.htl.notes;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 public class ToDo implements Serializable {
     private String title;
     private String details;
-    private LocalDateTime date;
+    private long date;
 
     public ToDo(String title, String details, LocalDateTime date) {
         this.title = title;
         this.details = details;
-        this.date = date;
+        this.date = date.atZone(ZoneId.systemDefault()).toEpochSecond();
     }
 
     public String serialize() {
-        return title + ";" + details + ";" + date.toString();
+        return title + ";" + details + ";" + date;
     }
 
     public static ToDo deserialize(String line) {
         String[] parts = line.split(";");
-        return new ToDo(parts[0], parts[1], LocalDateTime.parse(parts[2]));
+        return new ToDo(parts[0], parts[1], LocalDateTime.ofInstant(Instant.ofEpochSecond(Integer.parseInt(parts[2])), ZoneId.systemDefault()));
     }
 
     public String getTitle() {
@@ -40,10 +42,7 @@ public class ToDo implements Serializable {
     }
 
     public LocalDateTime getDate() {
-        return date;
+        return  LocalDateTime.ofInstant(Instant.ofEpochSecond(this.date), ZoneId.systemDefault());
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
 }
