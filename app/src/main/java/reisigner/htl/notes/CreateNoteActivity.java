@@ -28,7 +28,7 @@ public class CreateNoteActivity extends AppCompatActivity implements View.OnClic
 
     Button date;
     DatePickerDialog datePicker;
-    List<ToDo> notes = MainActivity.notes;
+    List<ToDo> notes = MainActivity.ShownToDos;
     EditText title;
     EditText details;
 
@@ -103,7 +103,7 @@ public class CreateNoteActivity extends AppCompatActivity implements View.OnClic
 
 
     private void preferenceChanged(SharedPreferences sharedPrefs , String key) {
-        changeBackground(sharedPrefs.getBoolean(key, true));
+        changeBackground(sharedPrefs.getBoolean(key, false));
     }
 
     private void changeBackground(boolean isDarkmode){
@@ -123,7 +123,7 @@ public class CreateNoteActivity extends AppCompatActivity implements View.OnClic
         } else if(v.getId() == R.id.ok) {
             if (!title.getText().toString().isEmpty()) {
                 Intent i = getIntent();
-                ToDo n = new ToDo(title.getText().toString(), details.getText().toString(), setDateTime);
+                ToDo n = new ToDo(title.getText().toString(), details.getText().toString(), setDateTime, false);
                 i.putExtra("note", n);
                 setResult(1, i);
                 finish();

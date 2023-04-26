@@ -29,8 +29,10 @@ import reisigner.htl.notes.functions.NoteAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
-    int positionOfEditedNote;
-    public static List<ToDo> notes = null;
+    ToDo ToDoToEdit;
+
+    public static List<ToDo> ShownToDos = null;
+
     NoteAdapter adapter;
     ListView listView;
     LinearLayout linearLayout;
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                     if (result.getData() != null) {
                         Intent i = result.getData();
                         Bundle b = i.getExtras();
-                        notes.add((ToDo) b.get("note"));
+                        ShownToDos.add((ToDo) b.get("note"));
                         adapter.notifyDataSetChanged();
                     }
                 }
@@ -60,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
                     if (result.getData() != null) {
                         Intent i = result.getData();
                         Bundle b = i.getExtras();
-                        notes.remove(positionOfEditedNote);
-                        notes.add( (ToDo) b.get("note"));
+                        ShownToDos.remove(ToDoToEdit);
+                        ShownToDos.add( (ToDo) b.get("note"));
                         adapter.notifyDataSetChanged();
                     }
                 }
@@ -85,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivityIntent.launch(t);
                 break;
             case idSave:
-                FileHandler.saveFile(notes, getApplicationContext());
+                FileHandler.saveFile(ShownToDos, getApplicationContext());
                 break;
             case idSettings:
                 Intent intent = new Intent(this,
@@ -108,8 +110,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (item.getItemId() == R.id.detailNote) {
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
-            alert.setTitle(notes.get(info.position).getTitle()  + " - " + notes.get(info.position).getDate());
-            alert.setMessage(notes.get(info.position).getDetails());
+            alert.setTitle(ShownToDos.get(info.position).getTitle()  + " - " + ShownToDos.get(info.position).getDate());
+            alert.setMessage(ShownToDos.get(info.position).getDetails());
             alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -118,12 +120,12 @@ public class MainActivity extends AppCompatActivity {
             });
             alert.show();
         } else if (item.getItemId() == R.id.deleteNote) {
-            notes.remove(info.position);
+            ShownToDos.remove(ShownToDos.remove(info.position));
             adapter.notifyDataSetChanged();
         } else if(item.getItemId() == R.id.editNote) {
             Intent t = new Intent(this, CreateNoteActivity.class);
-            positionOfEditedNote = info.position;
-            t.putExtra("note",notes.get(info.position));
+            ToDoToEdit = ShownToDos.get(info.position);
+            t.putExtra("note", ShownToDos.get(info.position));
             startActivityIntentForEdit.launch(t);
         }
         return super.onContextItemSelected(item);
@@ -139,9 +141,9 @@ public class MainActivity extends AppCompatActivity {
         prefs.registerOnSharedPreferenceChangeListener( preferencesChangeListener );
 
 
-        if(notes == null) {
-            notes = FileHandler.readFile(getApplicationContext());
-            if (notes.size() == 0) {
+        if(ShownToDos == null) {
+            ShownToDos = FileHandler.readFile(getApplicationContext());
+            if (ShownToDos.size() == 0) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
                 alert.setTitle("Keine gespeicherten Notizen").setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
@@ -153,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         listView = findViewById(R.id.list);
-        adapter = new NoteAdapter(getApplicationContext(), notes);
+        adapter = new NoteAdapter(getApplicationContext(), ShownToDos);
         listView.setAdapter(adapter);
 
         linearLayout = findViewById(R.id.background);

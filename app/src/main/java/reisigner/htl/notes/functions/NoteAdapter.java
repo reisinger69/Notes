@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -41,8 +43,23 @@ public class NoteAdapter extends ArrayAdapter<ToDo> {
         if (currentItemView == null) {
             currentItemView = LayoutInflater.from(getContext()).inflate(R.layout.listelement, parent, false);
         }
+        CheckBox checkBox = currentItemView.findViewById(R.id.checkBox);
 
         ToDo n = getItem(position);
+
+        View finalCurrentItemView = currentItemView;
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    getItem(position).setDone(true);
+
+                } else {
+                    getItem(position).setDone(false);
+                }
+                changeBackground(n, finalCurrentItemView);
+            }
+        });
 
         TextView textView1 = currentItemView.findViewById(R.id.noteTitle);
         textView1.setText(n.getTitle());
@@ -50,13 +67,25 @@ public class NoteAdapter extends ArrayAdapter<ToDo> {
         TextView textView2 = currentItemView.findViewById(R.id.noteDate);
         textView2.setText(n.getDate().toString());
 
-        LocalDate date = n.getDate().toLocalDate();
-        if (date.isBefore(LocalDate.now())) {
-            currentItemView.setBackgroundColor(Color.argb(162, 227, 34, 89));
-        } else {
-            currentItemView.setBackgroundColor(Color.argb(255,255,255,255));
+        if (n.isDone()){
+            checkBox.setChecked(true);
         }
 
+        currentItemView = changeBackground(n, currentItemView);
+
         return currentItemView;
+    }
+
+    private View changeBackground(ToDo toDo, View view){
+        LocalDate date = toDo.getDate().toLocalDate();
+        if (date.isBefore(LocalDate.now())) {
+            view.setBackgroundColor(Color.argb(162, 227, 34, 89));
+        } else {
+            view.setBackgroundColor(Color.argb(255,255,255,255));
+        }
+        if (toDo.isDone()){
+            view.setBackgroundColor(Color.GREEN);
+        }
+        return view;
     }
 }

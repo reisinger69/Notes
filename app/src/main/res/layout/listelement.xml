@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="5dp"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+    >
 
     <TextView
         android:id="@+id/noteDate"
@@ -11,7 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="2"
         android:padding="10dp"
-        android:text="TextView" />
+        android:text="TextView"
+        />
 
     <TextView
         android:id="@+id/noteTitle"
@@ -27,5 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:backgroundTint="#FFFFFF"
-        android:padding="10dp" />
+        android:padding="10dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 </LinearLayout>
