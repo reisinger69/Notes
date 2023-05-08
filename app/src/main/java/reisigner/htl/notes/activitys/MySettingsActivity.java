@@ -1,4 +1,4 @@
-package reisigner.htl.notes;
+package reisigner.htl.notes.activitys;
 
 import android.os.Bundle;
 

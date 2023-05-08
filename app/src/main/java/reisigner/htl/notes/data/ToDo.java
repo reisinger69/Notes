@@ -1,4 +1,4 @@
-package reisigner.htl.notes;
+package reisigner.htl.notes.data;
 
 import java.io.Serializable;
 import java.time.Instant;

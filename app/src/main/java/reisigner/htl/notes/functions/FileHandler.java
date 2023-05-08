@@ -2,7 +2,6 @@ package reisigner.htl.notes.functions;
 
 import android.content.Context;
 
-import com.google.api.client.json.gson.GsonFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -15,7 +14,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import reisigner.htl.notes.ToDo;
+import reisigner.htl.notes.data.ToDo;
 
 public class FileHandler {
 

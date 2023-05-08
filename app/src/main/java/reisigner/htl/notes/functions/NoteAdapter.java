@@ -14,10 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
-import reisigner.htl.notes.ToDo;
+import reisigner.htl.notes.data.ToDo;
 import reisigner.htl.notes.R;
 
 public class NoteAdapter extends ArrayAdapter<ToDo> {
@@ -51,12 +50,7 @@ public class NoteAdapter extends ArrayAdapter<ToDo> {
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    getItem(position).setDone(true);
-
-                } else {
-                    getItem(position).setDone(false);
-                }
+                getItem(position).setDone(isChecked);
                 changeBackground(n, finalCurrentItemView);
             }
         });

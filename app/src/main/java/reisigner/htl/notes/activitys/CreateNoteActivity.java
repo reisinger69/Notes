@@ -1,4 +1,4 @@
-package reisigner.htl.notes;
+package reisigner.htl.notes.activitys;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
@@ -22,6 +22,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import reisigner.htl.notes.R;
+import reisigner.htl.notes.data.ToDo;
 import reisigner.htl.notes.functions.NoteAdapter;
 
 public class CreateNoteActivity extends AppCompatActivity implements View.OnClickListener {
@@ -87,13 +89,14 @@ public class CreateNoteActivity extends AppCompatActivity implements View.OnClic
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         setDateTime = LocalDateTime.of(year, monthOfYear, dayOfMonth, hourOfDay, minute, 0);
+                        date.setText(setDateTime.toLocalDate().toString());
                     }
                 }, dateToUse.getHour(), dateToUse.getMinute(),false).show();
             }
         }, dateToUse.getYear(), dateToUse.getMonth().getValue(), dateToUse.getDayOfMonth());
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this );
-        preferencesChangeListener = (sharedPrefs , key ) -> preferenceChanged(sharedPrefs, key);
+        preferencesChangeListener = this::preferenceChanged;
         prefs.registerOnSharedPreferenceChangeListener( preferencesChangeListener );
 
         linearLayout=findViewById(R.id.linearLayout);

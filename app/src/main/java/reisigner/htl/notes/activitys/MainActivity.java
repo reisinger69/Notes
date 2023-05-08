@@ -1,4 +1,4 @@
-package reisigner.htl.notes;
+package reisigner.htl.notes.activitys;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -24,6 +24,8 @@ import android.widget.ListView;
 
 import java.util.List;
 
+import reisigner.htl.notes.R;
+import reisigner.htl.notes.data.ToDo;
 import reisigner.htl.notes.functions.FileHandler;
 import reisigner.htl.notes.functions.NoteAdapter;
 
@@ -72,8 +74,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.mainmenu, menu);
-        return super.onCreateOptionsMenu(menu);
+           return super.onCreateOptionsMenu(menu);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
