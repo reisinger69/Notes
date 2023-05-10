@@ -22,22 +22,30 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import java.io.File;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import reisigner.htl.notes.R;
 import reisigner.htl.notes.data.ToDo;
+import reisigner.htl.notes.data.ToDoList;
 import reisigner.htl.notes.functions.FileHandler;
-import reisigner.htl.notes.functions.NoteAdapter;
+import reisigner.htl.notes.functions.adapters.NoteAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
     ToDo ToDoToEdit;
 
-    public static List<ToDo> ShownToDos = null;
+    public static List<ToDo> ShownToDos = null; //todo position in allLists ist auch im Intent enthalten
+
+    int positionInAllLists = -1;
 
     NoteAdapter adapter;
     ListView listView;
     LinearLayout linearLayout;
+
+    String name;
 
     private SharedPreferences prefs;
     private SharedPreferences.OnSharedPreferenceChangeListener preferencesChangeListener;
@@ -90,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivityIntent.launch(t);
                 break;
             case idSave:
-                FileHandler.saveFile(ShownToDos, getApplicationContext());
+                FileHandler.saveFile(ShownToDos, getApplicationContext(), name);
                 break;
             case idSettings:
                 Intent intent = new Intent(this,
@@ -125,17 +133,19 @@ public class MainActivity extends AppCompatActivity {
         } else if (item.getItemId() == R.id.deleteNote) {
             ShownToDos.remove(ShownToDos.remove(info.position));
             adapter.notifyDataSetChanged();
-        } else if(item.getItemId() == R.id.editNote) {
+        } else if(item.getItemId() == R.id.newToDoList) {
             Intent t = new Intent(this, CreateNoteActivity.class);
             ToDoToEdit = ShownToDos.get(info.position);
-            t.putExtra("note", ShownToDos.get(info.position));
+            t.putExtra("note", (Serializable) ShownToDos.get(info.position));
             startActivityIntentForEdit.launch(t);
         }
         return super.onContextItemSelected(item);
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -143,12 +153,18 @@ public class MainActivity extends AppCompatActivity {
         preferencesChangeListener = (sharedPrefs , key ) -> preferenceChanged(sharedPrefs, key);
         prefs.registerOnSharedPreferenceChangeListener( preferencesChangeListener );
 
+        if (name==null || name.isEmpty()) {
+            Intent i = getIntent();
+            Bundle b = i.getExtras();
+            name = b.getString("name");
+        }
 
-        if(ShownToDos == null) {
-            ShownToDos = FileHandler.readFile(getApplicationContext());
+
+        if(ShownToDos == null || ShownToDos.isEmpty() || ShownToDos != FileHandler.readFile(this, name)) {
+            ShownToDos = FileHandler.readFile(this, name);
             if (ShownToDos.size() == 0) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                alert.setTitle("Keine gespeicherten Notizen").setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                alert.setTitle("Keine gespeicherten ToDos").setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -165,6 +181,12 @@ public class MainActivity extends AppCompatActivity {
 
         changeBackground(prefs.getBoolean("darkMode", true));
         registerForContextMenu(listView);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        FileHandler.saveFile(ShownToDos, this, name);
     }
 
     private void preferenceChanged(SharedPreferences sharedPrefs , String key) {

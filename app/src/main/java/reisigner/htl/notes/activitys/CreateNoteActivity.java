@@ -18,13 +18,14 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TimePicker;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import reisigner.htl.notes.R;
 import reisigner.htl.notes.data.ToDo;
-import reisigner.htl.notes.functions.NoteAdapter;
+import reisigner.htl.notes.functions.adapters.NoteAdapter;
 
 public class CreateNoteActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -127,7 +128,7 @@ public class CreateNoteActivity extends AppCompatActivity implements View.OnClic
             if (!title.getText().toString().isEmpty()) {
                 Intent i = getIntent();
                 ToDo n = new ToDo(title.getText().toString(), details.getText().toString(), setDateTime, false);
-                i.putExtra("note", n);
+                i.putExtra("note", (Serializable) n);
                 setResult(1, i);
                 finish();
             }

@@ -15,7 +15,7 @@
             android:name=".activitys.MainActivity"
             android:exported="false">
             <meta-data
-                android:name="android.app.lib_name"
+                android:name="android.ToDoList"
                 android:value="" />
         </activity>
         <activity

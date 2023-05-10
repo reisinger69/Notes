@@ -1,4 +1,4 @@
-package reisigner.htl.notes.functions;
+package reisigner.htl.notes.functions.adapters;
 
 import android.content.Context;
 import android.graphics.Color;

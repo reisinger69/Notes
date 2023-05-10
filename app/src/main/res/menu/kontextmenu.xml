@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:title="Bearbeiten"
-        android:id="@+id/editNote"/>
+        android:id="@+id/newToDoList"/>
 
     <item android:title="Löschen"
         android:id="@+id/deleteNote"/>
